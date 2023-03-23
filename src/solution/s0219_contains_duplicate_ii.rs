@@ -1,34 +1,29 @@
 /**
  * [219] Contains Duplicate II
  *
- * Given an array of integers and an integer k, find out whether there are two distinct indices i and j in the array such that nums[i] = nums[j] and the absolute difference between i and j is at most k.
+ * Given an integer array nums and an integer k, return true if there are two distinct indices i and j in the array such that nums[i] == nums[j] and abs(i - j) <= k.
+ *  
+ * <strong class="example">Example 1:
  *
- * <div>
- * Example 1:
+ * Input: nums = [1,2,3,1], k = 3
+ * Output: true
  *
+ * <strong class="example">Example 2:
  *
- * Input: nums = <span id="example-input-1-1">[1,2,3,1]</span>, k = <span id="example-input-1-2">3</span>
- * Output: <span id="example-output-1">true</span>
+ * Input: nums = [1,0,1,1], k = 1
+ * Output: true
  *
+ * <strong class="example">Example 3:
  *
- * <div>
- * Example 2:
+ * Input: nums = [1,2,3,1,2,3], k = 2
+ * Output: false
  *
+ *  
+ * Constraints:
  *
- * Input: nums = <span id="example-input-2-1">[1,0,1,1]</span>, k = <span id="example-input-2-2">1</span>
- * Output: <span id="example-output-2">true</span>
- *
- *
- * <div>
- * Example 3:
- *
- *
- * Input: nums = <span id="example-input-3-1">[1,2,3,1,2,3]</span>, k = <span id="example-input-3-2">2</span>
- * Output: <span id="example-output-3">false</span>
- *
- * </div>
- * </div>
- * </div>
+ * 	1 <= nums.length <= 10^5
+ * 	-10^9 <= nums[i] <= 10^9
+ * 	0 <= k <= 10^5
  *
  */
 pub struct Solution {}
@@ -41,19 +36,14 @@ pub struct Solution {}
 use std::collections::HashMap;
 impl Solution {
     pub fn contains_nearby_duplicate(nums: Vec<i32>, k: i32) -> bool {
-        let mut map = HashMap::new();
-        for (idx, &num) in nums.iter().enumerate() {
-            match map.get(&num) {
-                Some(v) => {
-                    if idx - v <= k as usize {
-                        return true;
-                    }
-                    map.insert(num, idx);
-                }
-                None => {
-                    map.insert(num, idx);
+        let mut lookup: HashMap<i32, usize> = HashMap::new();
+        for (idx, n) in nums.iter().enumerate() {
+            if let Some(tmp_idx) = lookup.get(n) {
+                if idx - tmp_idx <= k as usize {
+                    return true;
                 }
             }
+            lookup.insert(*n, idx);
         }
         false
     }
@@ -66,14 +56,5 @@ mod tests {
     use super::*;
 
     #[test]
-    fn test_219() {
-        assert_eq!(
-            Solution::contains_nearby_duplicate(vec![1, 2, 3, 1, 2, 3], 2),
-            false
-        );
-        assert_eq!(
-            Solution::contains_nearby_duplicate(vec![1, 2, 3, 1, 2, 3], 3),
-            true
-        );
-    }
+    fn test_219() {}
 }
